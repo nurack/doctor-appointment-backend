@@ -1,0 +1,27 @@
+package com.anurag.datapi.users.dto;
+
+import com.anurag.datapi.enums.Specialization;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import lombok.Data;
+
+import java.util.List;
+
+@Data
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class RegistrationRequest {
+
+    @NotBlank(message = "Name is required")
+    private String name;
+
+    private Specialization specialization;
+
+    private String licenseNumber;
+
+    @NotBlank(message = "Email is required")
+    @Email
+    private String email;
+
+    private List<String> roles;
+}

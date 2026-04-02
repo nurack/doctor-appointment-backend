@@ -1,5 +1,6 @@
 package com.anurag.datapi.patient.entity;
 
+import com.anurag.datapi.appointment.entity.Appointment;
 import com.anurag.datapi.enums.BloodGroup;
 import com.anurag.datapi.enums.GenoType;
 import com.anurag.datapi.users.entity.User;

@@ -1,5 +1,6 @@
 package com.anurag.datapi.appointment.entity;
 
+import com.anurag.datapi.consultation.entity.Consultation;
 import com.anurag.datapi.doctor.entity.Doctor;
 import com.anurag.datapi.enums.AppointmentStatus;
 import com.anurag.datapi.patient.entity.Patient;
@@ -43,7 +44,7 @@ public class Appointment {
     @JoinColumn(name = "patient_id", nullable = false)
     private Patient patient;
 
-    @OneToOne(mappedBy = "appointment", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "appointment", cascade = CascadeType.ALL)
     private Consultation consultation;
 
 }

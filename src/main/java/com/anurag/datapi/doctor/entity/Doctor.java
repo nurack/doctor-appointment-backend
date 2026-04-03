@@ -1,5 +1,6 @@
 package com.anurag.datapi.doctor.entity;
 
+import com.anurag.datapi.appointment.entity.Appointment;
 import com.anurag.datapi.enums.Specialization;
 import com.anurag.datapi.users.entity.User;
 import jakarta.persistence.*;

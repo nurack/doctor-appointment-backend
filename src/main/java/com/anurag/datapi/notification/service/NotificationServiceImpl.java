@@ -63,7 +63,7 @@ public class NotificationServiceImpl implements NotificationService{
                     .user(user)
                     .build();
 
-           // notificationRepo.save(notification);
+            notificationRepo.save(notification);
 
         } catch (Exception e) {
             log.info(e.getMessage());

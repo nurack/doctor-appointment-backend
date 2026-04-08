@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Appointment Confirmed</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        .container {
+            max-width: 500px;
+            margin: 20px auto;
+            background-color: #ffffff;
+        }
+        .header {
+            background-color: #22c55e;
+            color: white;
+            padding: 15px;
+            text-align: center;
+        }
+        .content {
+            padding: 25px;
+            line-height: 1.6;
+        }
+        .details {
+            background-color: #f7f7f7;
+            padding: 15px;
+            margin: 20px 0;
+            border-left: 4px solid #22c55e;
+        }
+        .button-container {
+            text-align: center;
+            margin: 25px 0;
+        }
+        .button {
+            display: inline-block;
+            padding: 12px 25px;
+            background-color: #2563eb;
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: bold;
+        }
+        .footer {
+            background-color: #f4f4f4;
+            color: #666;
+            padding: 15px;
+            text-align: center;
+            font-size: 0.85em;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h2>Appointment Confirmed</h2>
+    </div>
+
+    <div class="content">
+        <p>Dear <strong th:text="${patientName}"></strong>,</p>
+
+        <p>Your appointment with Dr. <span th:text="${doctorName}"></span> has been confirmed.</p>
+
+        <div class="details">
+            <p><strong>Doctor:</strong> Dr. <span th:text="${doctorName}"></span></p>
+            <p><strong>Date & Time:</strong> <span th:text="${appointmentTime}"></span></p>
+            <p><strong>Purpose:</strong> <span th:text="${purposeOfConsultation}"></span></p>
+            <p><strong>Type:</strong> <span th:text="${isVirtual ? 'Virtual Consultation' : 'In-Person Appointment'}"></span></p>
+        </div>
+
+        <div th:if="${isVirtual}">
+            <p><strong>Meeting Link:</strong> <span th:text="${meetingLink}"></span></p>
+            <div class="button-container">
+                <a th:href="${meetingLink}" class="button">Join Consultation</a>
+            </div>
+            <p style="font-size: 0.9em; text-align: center;">Please join a few minutes before time.</p>
+        </div>
+
+        <p>If you have any questions, check your account dashboard.</p>
+
+        <p>Thank you,<br>The AHS Health Team</p>
+    </div>
+
+    <div class="footer">
+        &copy; <span th:text="${T(java.time.Year).now()}">2026</span> AHS Health. All rights reserved.
+    </div>
+</div>
+</body>
+</html>

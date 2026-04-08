@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Welcome to AHS Health</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        .container {
+            max-width: 500px;
+            margin: 20px auto;
+            background-color: #ffffff;
+        }
+        .header {
+            background-color: #0d9488;
+            color: white;
+            padding: 15px;
+            text-align: center;
+        }
+        .content {
+            padding: 25px;
+            line-height: 1.6;
+        }
+        .button-container {
+            text-align: center;
+            margin: 25px 0;
+        }
+        .button {
+            display: inline-block;
+            padding: 12px 25px;
+            background-color: #0d9488;
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: bold;
+        }
+        .footer {
+            background-color: #f4f4f4;
+            color: #666;
+            padding: 15px;
+            text-align: center;
+            font-size: 0.85em;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>Welcome to AHS Health</h1>
+    </div>
+
+    <div class="content">
+        <p>Hello <strong th:text="${name}"></strong>,</p>
+
+        <p>Thank you for registering with AHS Health.</p>
+
+        <p>You can now log in to complete your profile and book appointments.</p>
+
+        <div class="button-container">
+            <a th:href="${loginLink}" class="button">Go to Login</a>
+        </div>
+
+        <p>We are here to help you manage your health easily.</p>
+
+        <p>The AHS Health Team</p>
+    </div>
+
+    <div class="footer">
+        &copy; <span th:text="${T(java.time.Year).now()}">2026</span> AHS Health. All rights reserved.
+    </div>
+</div>
+</body>
+</html>

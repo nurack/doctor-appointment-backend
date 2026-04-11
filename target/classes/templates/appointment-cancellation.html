@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Appointment Cancellation</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        .container {
+            max-width: 500px;
+            margin: 20px auto;
+            background-color: #ffffff;
+            padding: 0;
+        }
+        .header {
+            background-color: #f97316;
+            color: white;
+            padding: 15px;
+            text-align: center;
+        }
+        .content {
+            padding: 25px;
+            line-height: 1.6;
+        }
+        .details {
+            background-color: #fff7ed;
+            padding: 15px;
+            margin: 20px 0;
+            border-left: 4px solid #f97316;
+        }
+        .footer {
+            background-color: #f4f4f4;
+            color: #666;
+            padding: 15px;
+            text-align: center;
+            font-size: 0.85em;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h2>Appointment Canceled</h2>
+    </div>
+
+    <div class="content">
+        <p>Dear <strong th:text="${recipientName}"></strong>,</p>
+
+        <p>The following appointment has been canceled by <strong th:text="${cancellingPartyName}"></strong>.</p>
+
+        <div class="details">
+            <p><strong>Patient:</strong> <span th:text="${patientFullName}"></span></p>
+            <p><strong>Doctor:</strong> Dr. <span th:text="${doctorName}"></span></p>
+            <p><strong>Initial Appointment Time:</strong> <span th:text="${appointmentTime}"></span></p>
+            <p><strong>Canceled by:</strong> <span th:text="${cancellingPartyName}"></span></p>
+        </div>
+
+        <p>We apologize for any inconvenience caused. Please reschedule if needed or contact the other party.</p>
+
+    </div>
+
+    <div class="footer">
+        &copy; <span th:text="${T(java.time.Year).now()}">2026</span> DAT Health. All rights reserved.
+    </div>
+</div>
+</body>
+</html>

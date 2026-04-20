@@ -16,6 +16,7 @@ import com.anurag.datapi.users.dto.LoginRequest;
 import com.anurag.datapi.users.dto.LoginResponse;
 import com.anurag.datapi.users.dto.RegistrationRequest;
 import com.anurag.datapi.users.dto.ResetPasswordRequest;
+import com.anurag.datapi.users.entity.PasswordResetCode;
 import com.anurag.datapi.users.entity.User;
 import com.anurag.datapi.users.repo.PasswordResetRepo;
 import com.anurag.datapi.users.repo.UserRepo;
@@ -26,6 +27,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.print.Doc;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -44,6 +46,7 @@ public class AuthServiceImpl implements AuthService{
     private final PatientRepo patientRepo;
     private final DoctorRepo doctorRepo;
     private final PasswordResetRepo passwordResetRepo;
+    private final CodeGenerator codeGenerator;
 
     @Override
     public Response<String> register(RegistrationRequest registrationRequest) {
@@ -181,11 +184,82 @@ public class AuthServiceImpl implements AuthService{
 
     @Override
     public Response<?> forgetPassword(String email) {
-        return null;
+
+        User user = userRepo.findByEmail(email).orElseThrow(() -> new NotFoundException("User Not found"));
+        passwordResetRepo.deleteByUserId(user.getId());
+
+        String code = codeGenerator.generateUniqueCode();
+
+        PasswordResetCode passwordResetCode = PasswordResetCode.builder()
+                .user(user)
+                .code(code)
+                .expiryDate(calculateExpiryDate())
+                .used(false)
+                .build();
+
+        passwordResetRepo.save(passwordResetCode);
+
+        NotificationDTO passResetEmail = NotificationDTO.builder()
+                .recipient(user.getEmail())
+                .subject("Password reset code")
+                .templateName("password-reset")
+                .templateVariable(Map.of(
+                        "name", user.getName(),
+                        "resetLink", "test.com"
+                ))
+                .build();
+
+        notificationService.sendMail(passResetEmail, user);
+
+        return Response.builder()
+                .statusCode(200)
+                .message("Password reset code sent to email")
+                .build();
+
+    }
+
+    private LocalDateTime calculateExpiryDate() {
+        return LocalDateTime.now().plusHours(1);
     }
 
     @Override
     public Response<?> updatePasswordViaResetCode(ResetPasswordRequest resetPasswordRequest) {
-        return null;
+
+        String code = resetPasswordRequest.getCode();
+        String newPassword = resetPasswordRequest.getNewPassword();
+
+        log.info("Code is " + code);
+        log.info("New pass is " + newPassword);
+
+        PasswordResetCode resetCode = passwordResetRepo.findByCode(code)
+                .orElseThrow(() -> new BadRequestException("Invalid reset code"));
+
+        if(resetCode.getExpiryDate().isBefore(LocalDateTime.now())) {
+            passwordResetRepo.delete(resetCode);
+            throw new BadRequestException("Reset code has expried");
+        }
+
+        User user = resetCode.getUser();
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepo.save(user);
+
+        passwordResetRepo.delete(resetCode);
+
+        NotificationDTO passwordResetEmail = NotificationDTO.builder()
+                .recipient(user.getEmail())
+                .subject("Password updated successfully")
+                .templateName("password-update-confirmation")
+                .templateVariable(Map.of(
+                        "name", user.getName()
+                ))
+                .build();
+
+        notificationService.sendMail(passwordResetEmail, user);
+
+        return Response.builder()
+                .statusCode(HttpStatus.OK.value())
+                .message("Password updated successfully")
+                .build();
+
     }
 }

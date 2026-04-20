@@ -4,6 +4,7 @@ import com.anurag.datapi.response.Response;
 import com.anurag.datapi.users.dto.LoginRequest;
 import com.anurag.datapi.users.dto.LoginResponse;
 import com.anurag.datapi.users.dto.RegistrationRequest;
+import com.anurag.datapi.users.dto.ResetPasswordRequest;
 import com.anurag.datapi.users.service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -30,4 +31,13 @@ public class AuthController {
         return ResponseEntity.ok(authService.login(loginRequest));
     }
 
+    @PostMapping("/forgot-password")
+    public ResponseEntity<Response<?>> forgotPassword(@RequestBody ResetPasswordRequest resetPasswordRequest){
+        return ResponseEntity.ok(authService.forgetPassword(resetPasswordRequest.getEmail()));
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<Response<?>> resetPassword(@RequestBody ResetPasswordRequest resetPasswordRequest){
+        return ResponseEntity.ok(authService.updatePasswordViaResetCode(resetPasswordRequest));
+    }
 }
